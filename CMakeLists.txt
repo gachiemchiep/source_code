@@ -8,4 +8,5 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 # View the makefile commands during build
 #set(CMAKE_VERBOSE_MAKEFILE on)
 
-add_subdirectory(pcl)
+add_subdirectory(pcl_obj_detection)
+add_subdirectory(rs_pcl_segmentation)

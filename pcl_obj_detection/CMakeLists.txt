@@ -28,7 +28,7 @@ set(DEPENDENCIES
 
 # Create a list of 
 set(FILES 
-	pcd_read
+	global_hypothesis_verification
 )
 
 foreach(FILE ${FILES})
