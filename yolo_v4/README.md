@@ -24,51 +24,16 @@ We need to compile OpenCV using the following command
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D CMAKE_INSTALL_PREFIX=/usr/local \
     -D OPENCV_EXTRA_MODULES_PATH=~/opt/opencv/opencv_contrib/modules \
-    -D OPENCV_ENABLE_NONFREE=ON \
-    -D WITH_TBB=ON -D WITH_V4L=ON -D WITH_QT=OFF -D WITH_OPENGL=ON -D WITH_VTK=ON \
-    -D BUILD_EXAMPLES=ON ..\
-    -D BUILD_NEW_PYTHON_SUPPORT=ON \
-    -D BUILD_opencv_python3=ON \
-    -D BUILD_opencv_python2=ON \
-    -D HAVE_opencv_python3=ON \
-    -D INSTALL_PYTHON_EXAMPLES=ON \
-    -D OPENCV_FORCE_PYTHON_LIBS=ON \
-    -D PYTHON2_EXECUTABLE=~/miniconda3/envs/py2/bin/python \
-    -D PYTHON2_LIBRARY=~/miniconda3/envs/py2/lib/libpython2.7.so \
-    -D PYTHON2_INCLUDE_DIRS=~/miniconda3/envs/py2/include \
-    -D PYTHON2_NUMPY_INCLUDE_DIRS=~/miniconda3/envs/py2/lib/python2.7/site-packages/numpy \
-    -D PYTHON3_EXECUTABLE=~/miniconda3/envs/py3/bin/python \
-    -D PYTHON3_LIBRARY=~/miniconda3/envs/py3/lib/libpython3.7m.so \
-    -D PYTHON3_INCLUDE_DIRS=~/miniconda3/envs/py3/include \
-    -D PYTHON3_NUMPY_INCLUDE_DIRS=~/miniconda3/envs/py3/lib/python3.7/site-packages/numpy \
-    -D WITH_CUDA=ON \
-    -D WITH_CUDNN=ON \
-	-D OPENCV_DNN_CUDA=ON \
-    -D WITH_FFMPEG=ON \
-    -D WITH_TIFF=ON \
-	-D ENABLE_FAST_MATH=ON \
-    -D CUDA_FAST_MATH=1 \
-    -D WITH_CUBLAS=ON \
-	-D WITH_LIBV4L=ON \
-	-D WITH_GSTREAMER=ON \
-    -D WITH_GSTREAMER_0_10=OFF \
-    -D WITH_TBB=ON \
-    -D CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-10.1 \
-    -D CUDA_ARCH_BIN="6.0 6.1 7.0 7.5" -D CUDA_ARCH_PTX="" \
-    -D BUILD_EXAMPLES=ON ../opencv
-
-
-cmake -D CMAKE_BUILD_TYPE=RELEASE \
-    -D CMAKE_INSTALL_PREFIX=/usr/local \
-    -D OPENCV_EXTRA_MODULES_PATH=~/opt/opencv/opencv_contrib/modules \
     -D OPENCV_ENABLE_NONFREE=OFF \
-    -D WITH_TBB=ON -D WITH_V4L=ON -D WITH_QT=OFF -D WITH_OPENGL=ON -D WITH_VTK=ON \
-    -D BUILD_EXAMPLES=ON ..\
+    -D BUILD_EXAMPLES=OFF ..\
+	-D BUILD_DOCS=OFF \
+	-D BUILD_PERF_TESTS=OFF \
+	-D BUILD_TESTS=OFF \
     -D BUILD_NEW_PYTHON_SUPPORT=ON \
     -D BUILD_opencv_python3=ON \
     -D BUILD_opencv_python2=ON \
     -D HAVE_opencv_python3=ON \
-    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D INSTALL_PYTHON_EXAMPLES=OFF \
     -D OPENCV_FORCE_PYTHON_LIBS=ON \
     -D PYTHON2_EXECUTABLE=~/opt/miniconda2/bin/python \
     -D PYTHON2_LIBRARY=~/opt/miniconda2/lib/libpython2.7.so \
@@ -78,24 +43,30 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D PYTHON3_LIBRARY=~/opt/miniconda2/envs/py3.6/lib/libpython3.6m.so \
     -D PYTHON3_INCLUDE_DIRS=~/opt/miniconda2/envs/py3.6/include \
     -D PYTHON3_NUMPY_INCLUDE_DIRS=~/opt/miniconda2/envs/py3.6/lib/python3.6/site-packages/numpy \
-    -D WITH_CUDA=ON \
-    -D WITH_CUDNN=ON \
-	-D OPENCV_DNN_CUDA=ON \
-    -D WITH_FFMPEG=ON \
-    -D WITH_TIFF=ON \
-	-D ENABLE_FAST_MATH=ON \
-    -D CUDA_FAST_MATH=1 \
+    -D ENABLE_FAST_MATH=ON \
+    -D CUDA_FAST_MATH=ON \
     -D WITH_CUBLAS=ON \
-	-D WITH_LIBV4L=ON \
-	-D WITH_GSTREAMER=ON \
+    -D WITH_LIBV4L=ON \
+    -D WITH_GSTREAMER=ON \
     -D WITH_GSTREAMER_0_10=OFF \
     -D WITH_TBB=ON \
+    -D WITH_CUDA=ON -D WITH_CUDNN=ON -D WITH_NVCUVID=ON  \
+	-D OPENCV_DNN_CUDA=ON \
+    -D WITH_FFMPEG=1 \
+    -D WITH_TIFF=ON \
+    -D WITH_CUBLAS=1 \
     -D CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-10.1 \
-    -D CUDA_ARCH_BIN="6.0 6.1 7.0 7.5" -D CUDA_ARCH_PTX="" \
-    -D BUILD_EXAMPLES=ON ../opencv
+    -D CUDA_ARCH_BIN="7.5" -D CUDA_ARCH_PTX="" ../opencv
+
 ```
 
 Remember to compile with **OPENCV_DNN_CUDA** or else we won't be able to use the **DNN_TARGET_CUDA_FP16**
+
+Then use following scrip to run yolov4 on your webcam
+
+```bash
+python demo_wc.py
+```
 
 The postprocess which is being used at [https://github.com/opencv/opencv/blob/master/samples/dnn/object_detection.py](https://github.com/opencv/opencv/blob/master/samples/dnn/object_detection.py) run very slow. In some case postprocessing will cost more time than the inferencing. So we re-write using numpy and matrix manipulation. The result are as follow 
 
