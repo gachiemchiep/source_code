@@ -9,6 +9,7 @@ import time
 
 def get_args():
     parser = argparse.ArgumentParser(description='Benchmark yolov4.')
+    parser.add_argument('--file_path', help='file path. Use wc by default', default=0)
     parser.add_argument('--batch_size', help='Batch size.', type=int, default=1)
     parser.add_argument('--mode', help='fp32 or fp16', choices=['fp32', 'fp16'], default='fp32')
     parser.add_argument('--cfg', help='yolov4 cfg', required=True)
@@ -24,6 +25,7 @@ def get_args():
 def init_net(args):
 
     # Load a network
+    # see https://docs.opencv.org/master/d6/d0f/group__dnn.html for other backend
     net = cv2.dnn.readNet(args.cfg, args.weight, 'darknet')
     net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
     if args.mode == 'fp32':
@@ -137,10 +139,11 @@ def main():
     warm_up_net(net, outNames, args)
     print("Warmup network in: {:04.1f} ms".format( (time.time() - t0) * 1000))
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(args.file_path)
 
+    inference_time = [] 
     try:
-        cv2.namedWindow('RealSense', cv2.WINDOW_AUTOSIZE)
+        cv2.namedWindow('yolov4', cv2.WINDOW_AUTOSIZE)
         while True:
 
             # Wait for a coherent pair of frames: depth and color
@@ -166,6 +169,9 @@ def main():
             outs_ = net.forward(outNames)
             inference_1 = time.time()
 
+            # 
+            inference_time.append(inference_1 - inference_0)
+
             # only use the first frame for displaying
             if args.batch_size == 1:
                 outs = np.concatenate(outs_, axis=0)
@@ -186,14 +192,24 @@ def main():
             cv2.putText(color_image, label, (10, 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
             # Show images
-            cv2.imshow('RealSense', color_image)
+            cv2.imshow('yolov4', color_image)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
     finally:
 
-        # Stop streaming
-        pipeline.stop()
+        cap.release()
+        cv2.destroyAllWindows()
+
+        inference_time_np = np.array(inference_time)
+        inference_min = inference_time_np.min() * 1000 # ms
+        inference_max = inference_time_np.max() * 1000 # ms
+        inference_avg = np.average(inference_time_np) * 1000 # ms
+        fps = 1000 / (inference_avg / args.batch_size)
+
+        print("Min: {:04.4f} ms".format( inference_min))
+        print("Max: {:04.4f} ms".format( inference_max))
+        print("Avg: {:04.4f} ms {:04.4f} FPS".format( inference_avg, fps))
 
 if __name__ == "__main__":
     main()
