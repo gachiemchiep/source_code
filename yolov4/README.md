@@ -1,11 +1,23 @@
-# Re-produce inferecing speed of Yolov4 using acceleration framework
+# Summary
 
-Detail steps to re-produce the inference speed of Yolov4 reported at https://github.com/AlexeyAB/darknet for the following framework
-
+Detail steps to re-produce the inference speed of Yolov4 reported at https://github.com/AlexeyAB/darknet . The following acceleration frameworks are tested. 
 
 - [x] tkDNN
 - [x] OpenCV
 - [ ] TVM : not available yet
+
+```bash
+# Ubuntu : 18.04
+# Device : Gtx1060
+# Cuda   : 10.1 
+# OpenCV : master, 4.4-pre
+# tkDNN  : 0.5
+# TVM    : 0.7
+```
+
+Before going further, please follow steps at : [tensorflow install gpu](https://www.tensorflow.org/install/gpu) to install Cuda, cuDNN and tensorRT. All commands are using apt-get so it'll save a lot of time and effort.
+
+workspace for this post is at [https://github.com/gachiemchiep/source_code/tree/master/yolov4](https://github.com/gachiemchiep/source_code/tree/master/yolov4)
 
 ## tkDNN
 
