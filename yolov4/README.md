@@ -5,7 +5,7 @@ Detail steps to re-produce the inference speed of Yolov4 reported at https://git
 
 - [x] tkDNN
 - [x] OpenCV
-- [] TVM : not available yet
+- [ ] TVM : not available yet
 
 ## tkDNN
 
@@ -25,7 +25,7 @@ Detail steps to re-produce the inference speed of Yolov4 reported at https://git
 
 ```
 
-[tkDNN github](https://github.com/ceccocats/tkDNN) and follow [compiling](https://github.com/ceccocats/tkDNN#how-to-compile-this-repo) to compile
+Go to [tkDNN github](https://github.com/ceccocats/tkDNN) and follow [compiling](https://github.com/ceccocats/tkDNN#how-to-compile-this-repo) to compile tkDNN. 
 
 
 ```bash
@@ -75,7 +75,7 @@ mkdir layers debug
 ```
 
 
-* Combine into RT file. Replace content of yolo4.cpp main method by following.(it isJust change some path, no big deal)
+* Combine into RT file. Replace content of yolo4.cpp main method by following.(it isJust change some path, no big deal). The the modified file is at [yolo4.cpp](https://raw.githubusercontent.com/gachiemchiep/source_code/master/yolov4/tkDNN/yolo4.cpp)
 
 ```cpp
 int main() {
@@ -169,7 +169,8 @@ Avg: 51.1639 ms	19.545 FPS
 
 ### Prepare
 
-We need to compile OpenCV using the following command
+We need to compile OpenCV using the following command. If you're using a newer card, please add your architecture to the *CUDA_ARCH_BIN* parameters. See [Matching SM architectures (CUDA arch and CUDA gencode) for various NVIDIA cards](http://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/) for a list
+
 
 ```bash
 # Download the lastest version of opencv and opencv_contrib and put at following location
@@ -223,7 +224,7 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
     -D WITH_TIFF=ON \
     -D WITH_CUBLAS=1 \
     -D CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-10.1 \
-    -D CUDA_ARCH_BIN="6.0" -D CUDA_ARCH_PTX="" ../opencv
+    -D CUDA_ARCH_BIN="6.0 6.2 7.0 7.5" -D CUDA_ARCH_PTX="" ../opencv
 
 make -j8
 
@@ -277,30 +278,25 @@ The postprocess which is being used at [https://github.com/opencv/opencv/blob/ma
 # Ver 0 : use opencv version
 1 loop, best of 3: 27.4 s per loop
 -> postprocess = 27.4 / 100 = 0.274 sec = 274 ms
-	-> 91 ms per image
 
 # Ver 1 : use numpy argmax (remove the opencv for loop)
 1 loop, best of 3: 1.46 s per loop
 -> postprocess = 1.46 / 100 = 0.0146 = 14.6 ms
-	-> 5ms per image
 
 # Ver 2 : merge features and do postprocess for each image
 1 loop, best of 3: 1.54 s per loop
 -> postprocess  = 1.54 / 100 = 0.0154 = 15.4 ms
-	-> 5ms per image
 
 # Ver 3: merge all features, use confidence threshold to remove invalid bbox, then do nms for each image
 # note : each image has different valid bboxes. so in the last step we must use the for loop
 1 loop, best of 3: 1.45 s per loop
 -> post process = 1.45 / 100 = 0.0145 = 14.5 ms
 
--> 1, 2, 3 is very close
--> Ver 3 is fast but very hard to mainternance the code . 
-So we will use version 2 instead
-
 ```
 
 ## TVM
+
+DIDN'T WORK YET
 
 ### Preparation
 
@@ -335,7 +331,7 @@ The [Compile YOLO-V2 and YOLO-V3 in DarkNet Models](https://tvm.apache.org/docs/
 
 Device = GTX1060, input size = 608x608
 
-| FP   |      tkDNN      |  OpenCV |
+| FP   |      tkDNN  (ms)    |  OpenCV (ms) |
 |----------|:-------------:|------:|
 | FP32 |  49.6727 | 61.6272 |
 | FP16 |    51.1639   |   XXX |
@@ -344,7 +340,7 @@ Device = GTX1060, input size = 608x608
 
 * tkDNN : very fast, but the code isn't mature, need to write C++ code
 * OpenCV : fast, easy to use, don's need to much step, can use under C++ and Python
-- [] TVM : not available yet, but based on the official document, it can by used under Python
+* TVM : not available yet, but based on the official document, it can by used under Python
 
 ## Reference
 
