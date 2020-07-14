@@ -2,7 +2,7 @@
 
 - [X] brieft introduction
 - [X] compile mxnet model for local Nvidia GPU 
-- [ ] Others ....
+- [ ] Others . Will add in the future
 
 ## Introduction
 
@@ -101,8 +101,7 @@ Inference time:   5.241923 ms
 The input picture is classified as [deer], with probability 0.843.
 ```
 
-So by using tvm the inference time is reduced from *5.241923 ms* to *0.23 ms*. WOW, it's amazing.
-
+So by using tvm the inference time is reduced from *5.241923 ms* to *0.23 ms*. 
 ## Reference
 
 * General
