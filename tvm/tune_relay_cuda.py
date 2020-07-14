@@ -77,8 +77,10 @@ import tvm.contrib.graph_runtime as runtime
 
 def get_network(name, batch_size):
     """Get the symbol definition and random weight of a network"""
-    input_shape = (batch_size, 3, 224, 224)
-    output_shape = (batch_size, 1000)
+
+    # change for cifar
+    input_shape = (batch_size, 3, 32, 32)
+    output_shape = (batch_size, 10)
 
     if "resnet" in name:
         n_layer = int(name.split('-')[1])
@@ -98,6 +100,7 @@ def get_network(name, batch_size):
         # from mxnet.gluon.model_zoo.vision import get_model
         from gluoncv.model_zoo import get_model
         block = get_model('cifar_resnet20_v1', pretrained=True)
+        print("Use : {}".format("cifar_resnet20_v1"))
         mod, params = relay.frontend.from_mxnet(block, shape={'data': input_shape}, dtype=dtype)
         net = mod["main"]
         net = relay.Function(net.params, relay.nn.softmax(net.body), None, net.type_params, net.attrs)

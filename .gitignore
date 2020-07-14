@@ -34,3 +34,11 @@
 build
 .ipynb_checkpoints
 data
+
+3rdparty
+
+open3d
+d2l.ai
+mxnet_the_straight_dope
+notebooks
+tvm_learn
