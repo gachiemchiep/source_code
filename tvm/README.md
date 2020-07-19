@@ -2,6 +2,8 @@
 
 - [X] brieft introduction
 - [X] compile mxnet model for local Nvidia GPU 
+- [ ] GluonCV : SSD : ssd_512_resnet18_v1_voc
+- [ ] Gluoncv : AlphaPose
 - [ ] Others . Will add in the future
 
 ## Introduction
@@ -65,6 +67,8 @@ Note : without autotvm configuration, the Deep Learning model can still be used 
 
 My target device is **Nvidia GTX-1060Ti**
 
+### Image recognition: cifar_resnet20_v1
+
 * Mxnet + cifar_resnet20_v1 + tvm 
 
 ```bash
@@ -102,6 +106,30 @@ The input picture is classified as [deer], with probability 0.843.
 ```
 
 So by using tvm the inference time is reduced from *5.241923 ms* to *0.23 ms*. 
+
+### Object detection : ssd_512_resnet50_v1_voc.py
+
+
+
+```bash
+# use 8 threads
+export TVM_NUM_THREADS=10
+
+python tune_relay_cuda.py --model mxnet
+```
+
+* Mxnet + ssd_512_resnet50_v1_voc
+
+```bash
+
+/home/gachiemchiep/miniconda3/envs/py3/lib/python3.7/site-packages/mxnet/gluon/block.py:1389: UserWarning: Cannot decide type for the following arguments. Consider providing them as input:
+	data: None
+  input_sym_arg_type = in_param.infer_type()[0]
+[17:17:33] src/operator/nn/./cudnn/./cudnn_algoreg-inl.h:97: Running performance tests to find the best convolution algorithm, this can take a while... (set the environment variable MXNET_CUDNN_AUTOTUNE_DEFAULT to 0 to disable)
+Inference time:    7.2 ms
+
+```
+
 ## Reference
 
 * General
