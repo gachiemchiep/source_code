@@ -71,7 +71,7 @@ Try tu run tune_relay_cuda.py for cifar_resnet20_v1
     export TVM_BIND_THREADS=0
 
     # use 8 threads
-    export TVM_NUM_THREADS=6
+    export TVM_NUM_THREADS=10
     export TVM_BIND_THREADS=1 
 
 see this : https://discuss.tvm.ai/t/auto-tuning-too-slow/4439/13

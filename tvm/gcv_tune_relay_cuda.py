@@ -37,8 +37,57 @@ def get_network(name, batch_size):
         block = get_model('ssd_512_resnet50_v1_voc', pretrained=True)
         mod, params = relay.frontend.from_mxnet(block, shape={'data': input_shape}, dtype=dtype)
         net = mod["main"]
-        net = relay.Function(net.params, relay.nn.softmax(net.body), None, net.type_params, net.attrs)
+        net = relay.Function(net.params, net.body, None, net.type_params, net.attrs)
         mod = tvm.IRModule.from_expr(net)
+
+    elif name == 'hrnet_bottom_up':
+        import sys
+        sys.path.append("/datadrive/workspace/github/HRNet-Bottom-Up-Pose-Estimation")
+        sys.path.append("/datadrive/workspace/github/HRNet-Bottom-Up-Pose-Estimation/lib")
+
+        import sys
+        import cv2
+        import torch
+        from config import cfg, update_config
+        import argparse
+        import models
+
+        parser = argparse.ArgumentParser(description='Train keypoints network')
+        # general
+        parser.add_argument('--cfg', type=str, default="/datadrive/workspace/github/HRNet-Bottom-Up-Pose-Estimation/experiments/inference_demo.yaml")
+        parser.add_argument('--videoFile', type=str, required=False)
+        parser.add_argument('--outputDir', type=str, default='/output/')
+        parser.add_argument('--inferenceFps', type=int, default=10)
+        parser.add_argument('--visthre', type=float, default=0)
+        parser.add_argument('opts',
+                        help='Modify config options using the command-line',
+                        default=None,
+                        nargs=argparse.REMAINDER)
+        args = parser.parse_args()
+
+        update_config(cfg, args)
+
+        input_shape = (1, 3, 512, 512)
+        output_shape = None
+
+        cfg.defrost()
+        cfg.TEST.MODEL_FILE = "/datadrive/workspace/github/HRNet-Bottom-Up-Pose-Estimation/model/pose_coco/pose_hrnet_w32_reg_delaysep_bg01_stn_512_adam_lr1e-3_coco_x140.pth"
+        print('=> loading model from {}'.format(cfg.TEST.MODEL_FILE))
+        cfg.freeze()
+
+        pose_model = eval('models.'+cfg.MODEL.NAME+'.get_pose_net')(
+        cfg, is_train=False)
+        pose_model.load_state_dict(torch.load(
+            cfg.TEST.MODEL_FILE), strict=False)
+
+        input_data = torch.randn(input_shape)
+        scripted_model = torch.jit.trace(pose_model, input_data).eval()
+
+        mod, params = relay.frontend.from_pytorch(scripted_model, input_shapes=[('data', input_shape)], default_dtype=dtype)
+        net = mod["main"]
+        net = relay.Function(net.params, net.body, None, net.type_params, net.attrs)
+        mod = tvm.IRModule.from_expr(net)
+
     else:
         raise ValueError("Unsupported network: " + name)
 
@@ -53,7 +102,8 @@ def get_network(name, batch_size):
 target = tvm.target.cuda()
 
 #### TUNING OPTION ####
-network = 'ssd_512_resnet50_v1_voc'
+# network = 'ssd_512_resnet50_v1_voc'
+network = 'hrnet_bottom_up'
 log_file = "%s.log" % network
 dtype = 'float32'
 
