@@ -1,16 +1,4 @@
-Run both on GPU:
-    Detector: 16.79 ms
-    Pose: 227.68 ms
-
-Detector on GPU, Pose on CPU
-    Detector: 16.80 ms
-    Pose: 952.32 ms
-
-
-Run both on GPU : without the post processing
-
-Detector: 15.57 ms
-Pose: 26.63 ms
+- [ ] mmpose + TVM
 
 # Topdown approach
 
@@ -98,10 +86,6 @@ Pose vis: 60.72 ms
 * bottom-up approach : まだ対応しません、そろそろ
 
 [github issue](https://github.com/open-mmlab/mmpose/issues/31#issuecomment-663337636)
-
-
-----------> TODO : can TVM be used in the mmpose
-
 
 ## hrnet bottom up 
 
