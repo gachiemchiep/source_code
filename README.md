@@ -1,3 +1,5 @@
-A lot of code. They are use for some personal works. 
-Source code, maybe useful someday
+A lot of code. They are used for some personal works. 
+It's kind of mess.
+
+Maybe useful someday
 
