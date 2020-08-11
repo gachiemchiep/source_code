@@ -39,3 +39,4 @@ Very interesting project
 ## Reference
 
 1. [ROS blog: Intelligent Part Reconstruction](https://rosindustrial.org/news/2018/1/3/intelligent-part-reconstruction)
+2. [Python robotics: not useful](https://github.com/AtsushiSakai/PythonRobotics)
