@@ -76,6 +76,54 @@
 
 ```
 
+
+## Try nbv software
+
+- [ ] find working sample so we can use and understand the nbv part
+
+### http://wiki.ros.org/next_best_view
+
+-> can not access the code
+
+### http://wiki.ros.org/asr
+
+[Installation](http://wiki.ros.org/asr_installation) : all in bsd license
+
+-> Can't compile 
+-> depend on private software ivt
+
+```bash
+-- ==> add_subdirectory(asr-ros-pkg/perception/visual/vision_ivt/asr_ivt_bridge)
+CMake Error at /home/jil/workspace/catkin_ws_asr/devel/share/asr_ivt/cmake/asr_ivtConfig.cmake:173 (message):
+  Project 'asr_ivt_bridge' tried to find library 'ivtopencv'.  The library is
+  neither a target nor built/installed properly.  Did you compile project
+  'asr_ivt'? Did you find_package() it before the subdirectory containing its
+  code is included?
+Call Stack (most recent call first):
+  /opt/ros/kinetic/share/catkin/cmake/catkinConfig.cmake:76 (find_package)
+  asr-ros-pkg/perception/visual/vision_ivt/asr_ivt_bridge/CMakeLists.txt:4 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/jil/workspace/catkin_ws_asr/build/CMakeFiles/CMakeOutput.log".
+See also "/home/jil/workspace/catkin_ws_asr/build/CMakeFiles/CMakeError.log".
+Invoking "cmake" failed
+
+```
+
+-> only build the next_best_view
+
+-> can build but the following command produce nothing
+
+```bash 
+roslaunch asr_next_best_view next_best_view_core_sim.launch
+
+```
+
+### https://github.com/ethz-asl/nbvplanner
+
+-> can compile but can't execute the launch file
+
 ## Reference
 
 1. [ROS blog: Intelligent Part Reconstruction](https://rosindustrial.org/news/2018/1/3/intelligent-part-reconstruction)
