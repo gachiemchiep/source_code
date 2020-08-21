@@ -2,9 +2,19 @@
 
 ## Tóm tắt
 
-Giới thiệu chung về các dòng tép cảnh. Tổng cộng có 45 dòng tép, trong đó nước ngọt : 41 dòng, nước mặn : 4 dòng. 
+Giới thiệu chung về các dòng tép cảnh. 
 
 ## Chi tiết
+
+Các dòng tép chung và phân loại khoa học. 
+
+| Tên         | Họ      | Chi         | Loài            |
+|-------------|---------|-------------|-----------------|
+| Tép yamato  | Atyidae | Caridina    | C. multidentata |
+| Tép anh đào | Atyidae | Neocaridina | N. davidi       |
+| Tép ong     | Atyidae | Caridina    | C. cantonensis  |
+
+
 
 
 ### Tép yamato (Amano, Minami-numa  shrimp) 
@@ -47,7 +57,7 @@ Tên khoa học : [Neocaridina davidi](https://en.wikipedia.org/wiki/Neocaridina
 
 * blue best cherry shrimp
 
-![blue best](https://lh3.googleusercontent.com/proxy/q6Vw7fqIyqFAZUhT720isxZyrGYirhtaWBxx63b3-Z85hg6P_3gLZbIEamgIcr0uhvix-iaDLkCt-n7TIWEfgUHmmVhTBg)
+![blue best](https://cdn.shopify.com/s/files/1/1163/2672/files/CGB-BV2_large.jpg)
 
 * Larmax blue cherry shrimp
 
@@ -68,10 +78,49 @@ Chú ý : màu sắc sặc sỡ là tính trạng lặn của tép anh đào. Kh
 
 ### Tép ong (Red Cherry Shrimp)
 
-TODO : red cherry shrimp, zebra shrimp, pinto shrimp
+Tên khoa học [Caridina cantonensis](https://en.wikipedia.org/wiki/Bee_shrimp). Loaì tép này có các vành màu (đỏ hoặc đen) nổi rõ trên cơ thể nên giống con ong nên gọi là tép ong. Tép ong là loài có nguồn gốc bản địa ở phía Nam Trung Hoa. Các loài tép ong trong tự nhiên bao gồm : Orange Bee, Crystal Black, Red Tiger, Super Tiger, Tiger. Tép ong tự nhiên màu sắc rất xấu xí, nhưng thông qua quá trình lai tạo trong hàng chục năm nhiều loài tép ong xinh đẹp đã ra đời. 
+
+
+![tree](imgs/shrimp-tree.jpg)
+
+Các dòng tép ong thông dụng, vừa túi tiền. 
+
+* Red bee shrimp 
+
+![red bee](https://images.shopping-charm.jp/products/40b28818-431c-462d-b30e-afc7f103d011/w500h500.jpg)
+
+* Red tiger bee shrimp 
+
+![red tiger bee](https://satomi.ocnk.net/phone/data/satomi/image/high.quality/20190801_20921c.jpeg)
+
+* Black bee shrimp
+
+![black bee](https://www.garnelenhaus.com/media/image/bd/93/39/228_0_bienengarnele_k6_caridina_cantonensis_1_600x600.jpg)
+
+* Black tiger bee shrimp
+
+![black tiger](https://blue-planet.ocnk.net/data/blue-planet/image/20200703_55e916.JPG)
+
+* Green bee shrimp
+
+![green bee](https://i.pinimg.com/originals/d6/bf/89/d6bf8963175fb659b27dabbc77312ccc.png)
+
+* Blue jelly bee shrimp
+
+![blue jelly bee](https://i.pinimg.com/originals/0c/fc/ad/0cfcadb293936e159d92f3667869aa65.jpg)
+
+* Black king kong 
+
+![black king kong bee](https://previews.123rf.com/images/nagatsukihikaru/nagatsukihikaru1808/nagatsukihikaru180800022/107043853-close-up-of-taiwan-bee-black-king-kong-panda-shrimp-caridina-cantonesis-.jpg)
+
+Cũng giống như tép anh đào, gen qui định màu sắc sặc sỡ là tính trạng lặn. Nên khi nuôi chung một thời gian, tép con sinh ra sẽ mất dần gen qui định màu sắc sặc sỡ, trở về tính trạng nguyên thủy cuả nó. Cho nên khi nuôi tép ong cần thường xuyên lọc bỏ các tép con xấu và mua thêm tép bố mẹ để tăng cường nguồn gen tốt. 
+
+Cách nuôi dưỡng tép ong 
+
+![nuoi duong](imgs/shrimp-nuoi-trong.jpg)
 
 ## Link tham khảo 
 
 1. [https://aquakoke.com/tropical-fish-shrimp-type/#toc2](https://aquakoke.com/tropical-fish-shrimp-type)
 2. [https://aquariuminfo.org/shrimp.html](https://aquariuminfo.org/shrimp.html)
-3. Wikipedia
+3. [Tibee, Taitibee, Pinto, Mischling, F1, F2 terms explained](https://skfaquatics.com/forum/forums/topic/7637-tibee-taitibee-pinto-mischling-f1-f2-terms-explained/)
