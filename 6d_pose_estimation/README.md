@@ -7,10 +7,12 @@
 
 
 
+# course
 
+tsdf : http://graphics.cs.cmu.edu/courses/15769/fall2016content/lectures/16_realtime3d/16_realtime3d_slides.pdf
 
-
-
+Computer Graphics (CMU 15-462/662)
+http://15462.courses.cs.cmu.edu/fall2019/
 
 
 
