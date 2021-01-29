@@ -1,3 +1,12 @@
+# Active learning
+
+slide explains about active learning : [slideshare](https://www.slideshare.net/azuring/active-learning-lecture)
+
+
+datacamp : tutorials/active-learning : https://www.datacamp.com/community/tutorials/active-learning
+
+https://jacobgil.github.io/deeplearning/activelearning
+
 A reddit post  : https://www.reddit.com/r/computervision/comments/l695g1/you_should_try_active_learning/
 
 -> Roughly yeah, that's one way of doing it. Once you find the high loss / poorly performing examples in your dataset (the green cones example), go find more of those examples in your production datastream to label, retrain on the new dataset, and usually the new model should be better than the old one.
