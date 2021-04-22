@@ -5,3 +5,5 @@ Maybe useful someday. The layout is as follow
 
 * OSS_project : OSS project, maybe useful
 * self_training : tutorials, course, etc
+* general_theory : 理論など
+* toy_projects : links to some toy projects
