@@ -1,0 +1,3 @@
+[submodule "self_training/nlp/cs224d-2016-solutions"]
+	path = self_training/nlp/cs224d-2016-solutions
+	url = https://github.com/mleue/stanford-cs224d-2016-solutions.git
