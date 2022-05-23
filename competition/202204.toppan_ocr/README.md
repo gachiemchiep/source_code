@@ -61,7 +61,16 @@ Lesson learn
 1. too much time was spend on finding, reading about new algorithm.  
 As a result, I run out off time to train the SVTR algorithm. 
 
-2. When training CRNN and SATRN, first directory of images (all : 0~43, selected : 1~43) are excluded so in total the accuracy are a litte low. If I look carefully then the CRNN and ASTRN should have better result
+-> new ocr algorithm in paddleOCr, mmOCR are added frequently
+
+-> ocr algorithm performance can be improved by changing the basebone network into deeper one, change the input size
+
+-> unfortunately, network that uses transformer doesn't work that way. 
+
+2. When training CRNN and SATRN, first directory of images (all : 0~43, selected : 1~43) are excluded so in total the accuracy are a litte low.
+
+-> want to try again but run out of time
+
 
 ```
 
