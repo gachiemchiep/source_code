@@ -1,0 +1,196 @@
+# global configs
+Global:
+  checkpoints: null
+  pretrained_model: null # "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/rec/models/pretrain/product_ResNet50_vd_Aliproduct_v1.0_pretrained.pdparams"
+  output_dir: ./try12/
+  device: gpu
+  save_interval: 20
+  eval_during_train: True
+  eval_interval: 20
+  epochs: 120
+  print_batch_step: 10
+  use_visualdl: False
+  # used for static mode and model export
+  image_shape: [3, 224, 224]
+  save_inference_dir: ./inference
+  eval_mode: retrieval
+
+
+# model architecture
+Arch:
+  name: RecModel
+  infer_output_key: features
+  infer_add_softmax: False
+  
+  Backbone: 
+    name: ResNet50_vd
+    pretrained: True
+    # learning_rate: 1.0e-20 # NOTE: Temporarily set lr small enough to freeze the bias to zero
+
+  BackboneStopLayer:
+    name: "flatten"
+  Neck:
+    name: BNNeck
+    num_features: &feat_dim 2048
+    weight_attr:
+      initializer:
+        name: Constant
+        value: 1.0
+    bias_attr:
+      initializer:
+        name: Constant
+        value: 0.0
+      learning_rate: 1.0e-20 # NOTE: Temporarily set lr small enough to freeze the bias to zero
+  Head:
+    name: "FC"
+    embedding_size: *feat_dim
+    class_num: &class_num 122
+    weight_attr:
+      initializer:
+        name: Normal
+        std: 0.001
+    bias_attr: False
+   
+# loss function config for traing/eval process
+Loss:
+  Train:
+    - CELoss:
+        weight: 1.0
+        epsilon: 0.1
+    - TripletLossV2:
+        weight: 1.0
+        margin: 0.3
+        normalize_feature: False
+        feature_from: "backbone"
+    - CenterLoss:
+        weight: 0.0005
+        num_classes: *class_num
+        feat_dim: *feat_dim
+        feature_from: "backbone"
+  Eval:
+    - CELoss:
+        weight: 1.0
+Optimizer:
+  - Adam:
+      scope: RecModel
+      lr:
+        name: Piecewise
+        decay_epochs: [30, 60]
+        values: [0.00035, 0.000035, 0.0000035]
+        warmup_epoch: 10
+        warmup_start_lr: 0.0000035
+        by_epoch: True
+        last_epoch: 0
+      regularizer:
+        name: 'L2'
+        coeff: 0.0005
+  - SGD:
+      scope: CenterLoss
+      lr:
+        name: Constant
+        learning_rate: 1000.0 # NOTE: set to ori_lr*(1/centerloss_weight) to avoid manually scaling centers' gradidents.
+# data loader for train and eval
+DataLoader:
+  Train:
+    dataset:
+      name: ImageNetDataset
+      image_root: /home/user/workspace/202206.tanachou/data/
+      cls_label_path: /home/user/workspace/202206.tanachou/data/train/train_0.8.txt
+      transform_ops:
+        - DecodeImage:
+            to_rgb: True
+            channel_first: False
+        # - ResizeImage:      # image are already resize_short : 512
+        #     resize_short: 512
+        - RandCropImage:
+            size: 224
+        - RandFlipImage:
+            flip_code: 1
+        - RandAugment:
+            num_layers: 2
+            magnitude: 5
+        - TimmAutoAugment:
+            config_str: rand-m9-mstd0.5-inc1
+            interpolation: bicubic
+            img_size: 224
+        - NormalizeImage:
+            scale: 1.0/255.0
+            mean: [0.485, 0.456, 0.406]
+            std: [0.229, 0.224, 0.225]
+            order: ''
+        - RandomErasing:
+            EPSILON: 0.25
+            sl: 0.02
+            sh: 1.0/3.0
+            r1: 0.3
+            attempt: 10
+            use_log_aspect: True
+            mode: pixel
+
+    sampler:
+        name: DistributedRandomIdentitySampler
+        batch_size: 64
+        num_instances: 4
+        drop_last: False
+        shuffle: True
+    loader:
+        num_workers: 4
+        use_shared_memory: True
+
+  Eval:
+    Query:
+      dataset: 
+        name: ImageNetDataset
+        image_root: /home/user/workspace/202206.tanachou/data/
+        cls_label_path: /home/user/workspace/202206.tanachou/data/train/val_0.8.txt
+        transform_ops:
+          - DecodeImage:
+              to_rgb: True
+              channel_first: False
+          - ResizeImage:
+              size: 224
+              interpolation: bicubic
+              backend: pil
+          - NormalizeImage:
+              scale: 0.00392157
+              mean: [0.485, 0.456, 0.406]
+              std: [0.229, 0.224, 0.225]
+              order: ''
+      sampler:
+        name: DistributedBatchSampler
+        batch_size: 64
+        drop_last: False
+        shuffle: False
+      loader:
+        num_workers: 4
+        use_shared_memory: True
+
+    Gallery:
+      dataset: 
+        name: ImageNetDataset
+        image_root: /home/user/workspace/202206.tanachou/data/
+        cls_label_path: /home/user/workspace/202206.tanachou/data/train/val_0.8.txt
+        transform_ops:
+          - DecodeImage:
+              to_rgb: True
+              channel_first: False
+          - ResizeImage:
+              size: 224
+          - NormalizeImage:
+              scale: 0.00392157
+              mean: [0.485, 0.456, 0.406]
+              std: [0.229, 0.224, 0.225]
+              order: ''
+      sampler:
+        name: DistributedBatchSampler
+        batch_size: 64
+        drop_last: False
+        shuffle: False
+      loader:
+        num_workers: 4
+        use_shared_memory: True
+
+Metric:
+  Eval:
+    - mAP: {}
+

@@ -1,0 +1,187 @@
+# global configs
+Global:
+  checkpoints: null
+  pretrained_model: null
+  output_dir: ./try10/
+  device: gpu
+  save_interval: 10
+  eval_during_train: True
+  eval_interval: 20
+  epochs: 500
+  print_batch_step: 10
+  use_visualdl: False
+  # used for static mode and model export
+  image_shape: [3, 224, 224]
+  save_inference_dir: ./inference
+  eval_mode: retrieval
+  use_dali: False
+  to_static: False
+
+  # batch mixup
+  use_mix: True
+  # label smoothing
+  ls_epsilon: 0.1
+
+# model architecture
+Arch:
+  name: RecModel
+  infer_output_key: features
+  infer_add_softmax: False
+  class_num: 122
+
+  Backbone: 
+    name: ResNet50_vd
+    pretrained: True
+    use_ssld: True
+  BackboneStopLayer:
+    name: "flatten"
+  Neck:
+    name: FC
+    embedding_size: 2048
+    class_num: 512
+  Head:
+    name: ArcMargin 
+    embedding_size: 512
+    class_num: 122
+    margin: 0.2
+    scale: 30
+
+# loss function config for traing/eval process
+Loss:
+  Train:
+    - CELoss:
+        weight: 1.0
+        epsilon: 0.1
+  Eval:
+    - CELoss:
+        weight: 1.0
+
+Optimizer:
+  name: AdamW
+  beta1: 0.9
+  beta2: 0.999
+  epsilon: 1e-8
+  weight_decay: 0.05
+  no_weight_decay_name: pos_embed cls_token .bias norm 
+  one_dim_param_no_weight_decay: True
+  lr:
+    # for 8 cards
+    name: Cosine
+    learning_rate: 6.25e-5
+    eta_min: 6.25e-7
+    warmup_epoch: 20
+    warmup_start_lr: 6.25e-8
+
+
+# data loader for train and eval
+DataLoader:
+  Train:
+    dataset:
+      name: ImageNetDataset
+      image_root: /home/user/workspace/202206.tanachou/data/
+      cls_label_path: /home/user/workspace/202206.tanachou/data/train/train_0.8.txt
+      transform_ops:
+        - DecodeImage:
+            to_rgb: True
+            channel_first: False
+        # - ResizeImage:      # image are already resize_short : 512
+        #     resize_short: 512
+        - RandCropImage:
+            size: 224
+        - RandFlipImage:
+            flip_code: 1
+        - RandAugment:
+            num_layers: 2
+            magnitude: 5
+        - TimmAutoAugment:
+            config_str: rand-m9-mstd0.5-inc1
+            interpolation: bicubic
+            img_size: 224
+        - NormalizeImage:
+            scale: 1.0/255.0
+            mean: [0.485, 0.456, 0.406]
+            std: [0.229, 0.224, 0.225]
+            order: ''
+        - RandomErasing:
+            EPSILON: 0.25
+            sl: 0.02
+            sh: 1.0/3.0
+            r1: 0.3
+            attempt: 10
+            use_log_aspect: True
+            mode: pixel
+      # batch_transform_ops:
+      #   - OpSampler:
+      #       MixupOperator:
+      #         alpha: 0.8
+      #         prob: 0.5
+      #       CutmixOperator:
+      #         alpha: 1.0
+      #         prob: 0.5
+
+    sampler:
+      name: DistributedBatchSampler
+      batch_size: 128
+      drop_last: False
+      shuffle: True
+    loader:
+      num_workers: 4
+      use_shared_memory: True
+
+  Eval:
+    Query:
+      dataset: 
+        name: ImageNetDataset
+        image_root: /home/user/workspace/202206.tanachou/data/
+        cls_label_path: /home/user/workspace/202206.tanachou/data/train/val_0.8.txt
+        transform_ops:
+          - DecodeImage:
+              to_rgb: True
+              channel_first: False
+          - ResizeImage:
+              size: 224
+              interpolation: bicubic
+              backend: pil
+          - NormalizeImage:
+              scale: 0.00392157
+              mean: [0.485, 0.456, 0.406]
+              std: [0.229, 0.224, 0.225]
+              order: ''
+      sampler:
+        name: DistributedBatchSampler
+        batch_size: 64
+        drop_last: False
+        shuffle: False
+      loader:
+        num_workers: 4
+        use_shared_memory: True
+
+    Gallery:
+      dataset: 
+        name: ImageNetDataset
+        image_root: /home/user/workspace/202206.tanachou/data/
+        cls_label_path: /home/user/workspace/202206.tanachou/data/train/val_0.8.txt
+        transform_ops:
+          - DecodeImage:
+              to_rgb: True
+              channel_first: False
+          - ResizeImage:
+              size: 224
+          - NormalizeImage:
+              scale: 0.00392157
+              mean: [0.485, 0.456, 0.406]
+              std: [0.229, 0.224, 0.225]
+              order: ''
+      sampler:
+        name: DistributedBatchSampler
+        batch_size: 64
+        drop_last: False
+        shuffle: False
+      loader:
+        num_workers: 4
+        use_shared_memory: True
+
+Metric:
+  Eval:
+    - mAP: {}
+
