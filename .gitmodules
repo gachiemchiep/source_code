@@ -1,6 +1,0 @@
-[submodule "self_training/nlp/cs224d-2016-solutions"]
-	path = self_training/nlp/cs224d-2016-solutions
-	url = https://github.com/mleue/stanford-cs224d-2016-solutions.git
-[submodule "self_training/nlp/20211011.introduction-to-spacy/freecodecamp_spacy"]
-	path = self_training/nlp/20211011.introduction-to-spacy/freecodecamp_spacy
-	url = https://github.com/wjbmattingly/freecodecamp_spacy.git
