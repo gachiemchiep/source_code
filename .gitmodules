@@ -1,0 +1,6 @@
+[submodule "courses/llm-zoomcamp"]
+	path = courses/llm-zoomcamp
+	url = https://github.com/DataTalksClub/llm-zoomcamp.git
+[submodule "courses/data-engineering-zoomcamp"]
+	path = courses/data-engineering-zoomcamp
+	url = https://github.com/DataTalksClub/data-engineering-zoomcamp.git
